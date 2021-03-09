@@ -1,7 +1,7 @@
 public class Button { // creates a button
 
   private float x, y, width, height;
-  private boolean on;
+  private boolean on = false;
 
 
   private Button(float xx, float yy, float ww, float hh) {
