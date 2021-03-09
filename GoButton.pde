@@ -34,6 +34,6 @@ public class GoButton { // creates start button
     }
     rect(x, y, width, height);
     fill(255, 255, 255);
-    text(stat, 362, 383);
+    //text(stat, 362, 383);
   }
 }
