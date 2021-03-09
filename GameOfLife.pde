@@ -9,8 +9,8 @@ public GoButton gg;
 public ClearButton erase;
 public int countRow = 0;
 public int countCol = 0;
-ArrayList <Integer> changeRow = new ArrayList <Integer> ();
-ArrayList <Integer> changeCol = new ArrayList <Integer> ();
+ArrayList <Integer> changeRow = new ArrayList<Integer>();
+ArrayList <Integer> changeCol = new ArrayList<Integer>();
 
 public void setup() {
   frameRate(8);
