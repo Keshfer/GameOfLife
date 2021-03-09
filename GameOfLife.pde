@@ -13,7 +13,7 @@ ArrayList <Integer> changeRow = new ArrayList<Integer>();
 ArrayList <Integer> changeCol = new ArrayList<Integer>();
 
 public void setup() {
-  frameRate(8);
+  //frameRate(8);
   size(400, 400);
   //rectMode(CENTER);
   //makes manager
