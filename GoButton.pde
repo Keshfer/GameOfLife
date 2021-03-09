@@ -28,8 +28,7 @@ public class GoButton { // creates start button
         changeRow.remove(0);
         changeCol.remove(0);
       }
-      changeRow.removeAll(changeRow);
-      changeCol.removeAll(changeCol);
+      
     } else {
       fill(200, 0, 0);
       stat = "Start";
