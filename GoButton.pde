@@ -23,8 +23,10 @@ public class GoButton { // creates start button
           isLiveDead(NUM_ROWS, NUM_COLS, t, u);
         }
       }
-      for (int i = 0; i < changeRow.size(); i++) {
-        buttArray[changeRow.get(i)][changeCol.get(i)].on = !(buttArray[changeRow.get(i)][changeCol.get(i)].on);
+      while (changeRow.size() > 0) {
+        buttArray[changeRow.get(0)][changeCol.get(0)].on = !(buttArray[changeRow.get(0)][changeCol.get(0)].on);
+        changeRow.remove(0);
+        changeCol.remove(0);
       }
       changeRow.removeAll(changeRow);
       changeCol.removeAll(changeCol);
