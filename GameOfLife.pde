@@ -1,86 +1,209 @@
+//CHECK TO SEE IF LIFELOGIC WORKS
 import de.bezier.guido.*;
-//Declare and initialize constants NUM_ROWS and NUM_COLS = 20
-private Life[][] buttons; //2d array of Life buttons each representing one cell
-private boolean[][] buffer; //2d array of booleans to store state of buttons array
-private boolean running = true; //used to start and stop program
+import java.util.ArrayList;
+//private Button oof;
+public final static int NUM_ROWS = 20;
+public final static int NUM_COLS = 18;
+public Button[][] buttArray = new Button[20][18];
+public GoButton gg;
+public ClearButton erase;
+public int countRow = 0;
+public int countCol = 0;
+ArrayList<Integer> changeRow = new ArrayList<Integer>();
+ArrayList<Integer> changeCol = new ArrayList<Integer>();
 
-public void setup () {
+public void setup() {
+  frameRate(8);
   size(400, 400);
-  frameRate(6);
-  // make the manager
+  //rectMode(CENTER);
+  //makes manager
   Interactive.make( this );
 
-  //your code to initialize buttons goes here
-
-  //your code to initialize buffer goes here
-}
-
-public void draw () {
-  background( 0 );
-  if (running == false) //pause the program
-    return;
-  copyFromButtonsToBuffer();
-
-  //use nested loops to draw the buttons here
-
-  copyFromBufferToButtons();
-}
-
-public void keyPressed() {
-  //your code here
-}
-
-public void copyFromBufferToButtons() {
-  //your code here
-}
-
-public void copyFromButtonsToBuffer() {
-  //your code here
-}
-
-public boolean isValid(int r, int c) {
-  //your code here
-  return false;
-}
-
-public int countNeighbors(int row, int col) {
-  int neighbors = 0;
-  //your code here
-  return neighbors;
-}
-
-public class Life {
-  private int myRow, myCol;
-  private float x, y, width, height;
-  private boolean alive;
-
-  public Life (int row, int col) {
-    // width = 400/NUM_COLS;
-    // height = 400/NUM_ROWS;
-    myRow = row;
-    myCol = col; 
-    x = myCol*width;
-    y = myRow*height;
-    alive = Math.random() < .5; // 50/50 chance cell will be alive
-    Interactive.add( this ); // register it with the manager
+  //makes a grid of Button stored in array
+  for (int i = 0; i < 400; i = i + 20) {
+    for (int y = 0; y < 350; y = y + 20) {
+      //System.out.println(countRow + "," + countCol);
+      buttArray[countRow][countCol]= new Button(i, y, 20, 20);
+      if (countCol >= 17) {
+        countCol = 0;
+      } else {
+        countCol++;
+      }
+    }
+    if (countRow >= 20) {
+      countRow = 0;
+    } else {
+      countRow++;
+    }
   }
+  //Instance of GoButton
+  gg = new GoButton(360, 365, 30, 30);
+  erase = new ClearButton(320,365,30,30);
+  
+}
 
-  // called by manager
-  public void mousePressed () {
-    alive = !alive; //turn cell on and off with mouse press
+public void draw() {
+  background(0, 0, 0);
+}
+
+
+public void isLiveDead(int NM_ROWS, int NM_COLS, int row, int col) {//checks if cell is live or not
+  if (row >= 0 && row < NM_ROWS && col >= 0 && col < NM_COLS) {
+    if (buttArray[row][col].on) {
+      //System.out.println("live");
+      LifeLogic(true, row, col);
+    } else {
+      //System.out.println("dead");
+      LifeLogic(false, row, col);
+    }
+  } else {
+    System.out.println("Doesn't exist");
   }
-  public void draw () {    
-    if (alive != true)
-      fill(0);
-    else 
-      fill( 150 );
-    rect(x, y, width, height);
-  }
-  public boolean getLife() {
-    //replace the code one line below with your code
+}
+
+public Boolean isValid(int NM_ROWS, int NM_COLS, int row, int col) {//checks if cell exists in grid
+  if (row >= 0 && row < NM_ROWS && col >= 0 && col < NM_COLS) {
+    return true;
+  } else {
     return false;
   }
-  public void setLife(boolean living) {
-    //your code here
+}
+public void LifeLogic(Boolean status, int row, int col) { //Determines what dies lives reproduce
+  int countAlive = 0;
+  int countDead = 0;
+
+  if (status) {
+    //Checks neighboring cells clockwise starting from 12 o clock
+    if (isValid(NUM_ROWS, NUM_COLS, row, col-1)) {
+      if (buttArray[row][col-1].on) {
+        countAlive++;
+      } else {
+        countDead++;
+      }
+    }
+    if (isValid(NUM_ROWS, NUM_COLS, row+1, col-1)) {
+      if (buttArray[row+1][col-1].on) {
+        countAlive++;
+      } else {
+        countDead++;
+      }
+    }
+    if (isValid(NUM_ROWS, NUM_COLS, row+1, col)) {
+      if (buttArray[row+1][col].on) {
+        countAlive++;
+      } else {
+        countDead++;
+      }
+    }
+    if (isValid(NUM_ROWS, NUM_COLS, row+1, col+1)) {
+      if (buttArray[row+1][col+1].on) {
+        countAlive++;
+      } else {
+        countDead++;
+      }
+    }
+    if (isValid(NUM_ROWS, NUM_COLS, row, col+1)) {
+      if (buttArray[row][col+1].on) {
+        countAlive++;
+      } else {
+        countDead++;
+      }
+    }
+    if (isValid(NUM_ROWS, NUM_COLS, row-1, col+1)) {
+      if (buttArray[row-1][col+1].on) {
+        countAlive++;
+      } else {
+        countDead++;
+      }
+    }
+    if (isValid(NUM_ROWS, NUM_COLS, row-1, col)) {
+      if (buttArray[row-1][col].on) {
+        countAlive++;
+      } else {
+        countDead++;
+      }
+    }
+    if (isValid(NUM_ROWS, NUM_COLS, row-1, col-1)) {
+      if (buttArray[row-1][col-1].on) {
+        countAlive++;
+      } else {
+        countDead++;
+      }
+    }
+    //System.out.println("alive stat " + countAlive);
+    //System.out.println("alive stat " + countDead);
+    if (countAlive < 2) {
+      changeRow.add(row);
+      changeCol.add(col);
+    } else if (countAlive > 3) {
+      changeRow.add(row);
+      changeCol.add(col);
+    }
+  } else {
+    //Checks neighboring cells clockwise starting from 12 o clock
+    if (isValid(NUM_ROWS, NUM_COLS, row, col-1)) {
+      if (buttArray[row][col-1].on) {
+        countAlive++;
+      } else {
+        countDead++;
+      }
+    }
+    if (isValid(NUM_ROWS, NUM_COLS, row+1, col-1)) {
+      if (buttArray[row+1][col-1].on) {
+        countAlive++;
+      } else {
+        countDead++;
+      }
+    }
+    if (isValid(NUM_ROWS, NUM_COLS, row+1, col)) {
+      if (buttArray[row+1][col].on) {
+        countAlive++;
+      } else {
+        countDead++;
+      }
+    }
+    if (isValid(NUM_ROWS, NUM_COLS, row+1, col+1)) {
+      if (buttArray[row+1][col+1].on) {
+        countAlive++;
+      } else {
+        countDead++;
+      }
+    }
+    if (isValid(NUM_ROWS, NUM_COLS, row, col+1)) {
+      if (buttArray[row][col+1].on) {
+        countAlive++;
+      } else {
+        countDead++;
+      }
+    }
+    if (isValid(NUM_ROWS, NUM_COLS, row-1, col+1)) {
+      if (buttArray[row-1][col+1].on) {
+        countAlive++;
+      } else {
+        countDead++;
+      }
+    }
+    if (isValid(NUM_ROWS, NUM_COLS, row-1, col)) {
+      if (buttArray[row-1][col].on) {
+        countAlive++;
+      } else {
+        countDead++;
+      }
+    }
+    if (isValid(NUM_ROWS, NUM_COLS, row-1, col-1)) {
+      if (buttArray[row-1][col-1].on) {
+        countAlive++;
+      } else {
+        countDead++;
+      }
+    }
+    //System.out.println("dead stat " + countAlive);
+    //System.out.println("dead stat " + countDead);
+    if (countAlive == 3) {
+      changeRow.add(row);
+      changeCol.add(col);
+    }
   }
+  //changes cells' states
+  
 }
